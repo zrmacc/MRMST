@@ -74,6 +74,7 @@ OneSample <- function(
   # Output.
   z <- stats::qnorm(1 - alpha / 2)
   table <- data.frame(
+    n = nrow(times),
     tau = tau,
     k = n_comp,
     auc = obs_stat,

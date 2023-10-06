@@ -24,6 +24,7 @@ MaxEventTime <- function(
     return(max(current_time[current_status == 1]))
   })
   max_event_times <- do.call(c, max_event_times)
+  max_event_times <- max(0, max_event_times)
   return(max(max_event_times))
 }
 

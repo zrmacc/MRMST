@@ -7,12 +7,15 @@ Updated: 2023-10-06
 
 ### Overview
 
-Suppose that, for each patient, $K$ time-to-event outcomes $(T_{1}, \dots, T_{K})$ outcomes are available, each potentially subject to censoring. Let $\delta_{k} = 1$ if the $k$th event is observed, and $\delta_{k} = 0$ if the $k$th event is censored. For a specified time window $(0, \tau)$, define the parameter:
-
-$$
-\theta = \sum_{k=1}^{K}\int_{0}^{\tau}S_{k}(t)dt,
-$$
+Suppose that, for each patient, $K$ time-to-event outcomes $(T_{1}, \dots, T_{K})$ outcomes are available, each potentially subject to censoring. Let $\delta_{k} = 1$ if the $k$th event is observed, and $\delta_{k} = 0$ if the $k$th event is censored. For a specified time window $(0, \tau)$, define the parameter $\theta = \sum_{k=1}^{K}\int_{0}^{\tau}S_{k}(t)dt,$
 where $S_{k}(t) = \mathbb{P}(T_{k} > t)$. $\theta$ can be interpreted as the cumulative area under the curve (AUC) for the $K$ survival functions $(S_{1}, \dots, S_{K})$. This package performance inference on the difference and ratio of $\theta$, comparing two independent treatment arms.
+
+
+### Installation
+
+```r
+devtools::install_github(repo = "zrmacc/MRMST")
+```
 
 
 ### Data
@@ -26,13 +29,13 @@ head(data)
 ```
 
 ```
-##   idx event_rate frailty censor_rate      time1 status1      time2 status2
-## 1   1          1       1        0.25 0.02403944       1 0.42087232       1
-## 2   2          1       1        0.25 1.46719085       1 2.81605665       0
-## 3   3          1       1        0.25 0.27992212       1 0.07674163       1
-## 4   4          1       1        0.25 0.87976750       1 0.38247849       0
-## 5   5          1       1        0.25 1.56244688       1 1.82365773       1
-## 6   6          1       1        0.25 2.33398972       0 0.78085565       1
+##   idx event_rate frailty censor_rate      time1 status1       time2 status2
+## 1   1          1       1        0.25 0.12967784       1 0.557029030       1
+## 2   2          1       1        0.25 0.47786747       1 0.002097068       1
+## 3   3          1       1        0.25 1.30706656       0 0.228389488       1
+## 4   4          1       1        0.25 1.31941793       0 0.642464861       1
+## 5   5          1       1        0.25 1.82593373       1 0.766493656       1
+## 6   6          1       1        0.25 0.03761174       1 1.273435968       1
 ```
 
 ### One-Sample Problem
@@ -51,8 +54,8 @@ show(one_sample)
 
 ```
 ## Multiple RMST with 2 components.
-##     tau k  auc    se lower upper
-## 1 3.972 2 1.79 0.134 1.528 2.053
+##     n   tau k   auc    se lower upper
+## 1 100 3.942 2 2.102 0.149  1.81 2.394
 ```
 
 ### Two-Sample Problem
@@ -81,18 +84,18 @@ show(two_sample)
 ```
 ## Arm 0:
 ## Multiple RMST with 2 components.
-##   arm   tau k   auc    se lower upper
-## 1   0 2.496 2 1.893 0.139 1.622 2.165
+##   arm  n   tau k   auc    se lower upper
+## 1   0 50 1.815 2 1.657 0.128 1.406 1.908
 ## 
 ## Arm 1:
 ## Multiple RMST with 2 components.
-##   arm   tau k   auc    se lower upper
-## 1   1 2.496 2 0.794 0.078 0.641 0.946
+##   arm  n   tau k   auc    se lower upper
+## 1   1 50 1.815 2 0.747 0.066 0.618 0.875
 ## 
 ## Contrast:
 ##    stat    est    se  lower  upper p
-## 1 A1-A0 -1.100 0.159 -1.411 -0.788 0
-## 2 A1/A0  0.419 0.051  0.330  0.533 0
+## 1 A1-A0 -0.910 0.144 -1.192 -0.628 0
+## 2 A1/A0  0.451 0.053  0.358  0.567 0
 ```
 
 

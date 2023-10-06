@@ -365,10 +365,12 @@ display: none;
 <p>Suppose that, for each patient, <span class="math inline">\(K\)</span> time-to-event outcomes <span class="math inline">\((T_{1}, \dots, T_{K})\)</span> outcomes are
 available, each potentially subject to censoring. Let <span class="math inline">\(\delta_{k} = 1\)</span> if the <span class="math inline">\(k\)</span>th event is observed, and <span class="math inline">\(\delta_{k} = 0\)</span> if the <span class="math inline">\(k\)</span>th event is censored. For a specified
 time window <span class="math inline">\((0, \tau)\)</span>, define the
-parameter <span class="math inline">\(\theta =
-\sum_{k=1}^{K}\int_{0}^{\tau}S_{k}(t)dt,\)</span> where <span class="math inline">\(S_{k}(t) = \mathbb{P}(T_{k} &gt; t)\)</span>.
-<span class="math inline">\(\theta\)</span> can be interpreted as the
-cumulative area under the curve (AUC) for the <span class="math inline">\(K\)</span> survival functions <span class="math inline">\((S_{1}, \dots, S_{K})\)</span>. This package
+parameter:</p>
+<p><span class="math display">\[\theta =
+\sum_{k=1}^{K}\int_{0}^{\tau}S_{k}(t)dt,\]</span></p>
+<p>where <span class="math inline">\(S_{k}(t) = \mathbb{P}(T_{k} &gt;
+t)\)</span>. <span class="math inline">\(\theta\)</span> can be
+interpreted as the cumulative area under the curve (AUC) for the <span class="math inline">\(K\)</span> survival functions <span class="math inline">\((S_{1}, \dots, S_{K})\)</span>. This package
 performance inference on the difference and ratio of <span class="math inline">\(\theta\)</span>, comparing two independent
 treatment arms.</p>
 </div>

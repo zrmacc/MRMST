@@ -18,7 +18,10 @@ knitr::opts_chunk$set(cache = TRUE)
 
 ### Overview
 
-Suppose that, for each patient, $K$ time-to-event outcomes $(T_{1}, \dots, T_{K})$ outcomes are available, each potentially subject to censoring. Let $\delta_{k} = 1$ if the $k$th event is observed, and $\delta_{k} = 0$ if the $k$th event is censored. For a specified time window $(0, \tau)$, define the parameter $\theta = \sum_{k=1}^{K}\int_{0}^{\tau}S_{k}(t)dt,$
+Suppose that, for each patient, $K$ time-to-event outcomes $(T_{1}, \dots, T_{K})$ outcomes are available, each potentially subject to censoring. Let $\delta_{k} = 1$ if the $k$th event is observed, and $\delta_{k} = 0$ if the $k$th event is censored. For a specified time window $(0, \tau)$, define the parameter:
+
+$$\theta = \sum_{k=1}^{K}\int_{0}^{\tau}S_{k}(t)dt,$$
+
 where $S_{k}(t) = \mathbb{P}(T_{k} > t)$. $\theta$ can be interpreted as the cumulative area under the curve (AUC) for the $K$ survival functions $(S_{1}, \dots, S_{K})$. This package performance inference on the difference and ratio of $\theta$, comparing two independent treatment arms.
 
 

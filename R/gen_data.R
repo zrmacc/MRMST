@@ -10,7 +10,7 @@
 #' @return Numeric vector.
 #' @noRd
 GenLinPred <- function(beta_event, covariates, n_subj) {
-  if (!is.null(beta_event) & !is.null(covariates)) {
+  if (!is.null(beta_event) && !is.null(covariates)) {
     covariates <- data.matrix(covariates)
     eta <- as.numeric(covariates %*% beta_event)
   } else {
@@ -108,7 +108,7 @@ GenData <- function(
   n_subj <- length(eta)
   df <- data.frame(idx = seq_len(n_subj))
   
-  # Add covaraites, if provided.
+  # Add covariates, if provided.
   if (!is.null(covariates)) {
     df <- cbind(df, covariates)
   }

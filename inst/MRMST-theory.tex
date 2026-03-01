@@ -1,0 +1,118 @@
+% MRMST: Mathematical theory
+% Multiple Restricted Mean Survival Time
+
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{natbib}
+
+\title{Multiple RMST}
+\author{Zachary R. McCaw}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Overview}
+
+The MRMST package performs inference on a weighted sum of restricted mean survival times (RMSTs) across multiple time-to-event outcomes. This document summarizes the parameter of interest, its Kaplan--Meier estimation, the influence function used for variance estimation, and the one- and two-sample inference procedures.
+
+\section{Single-outcome RMST}
+
+\subsection{Setting}
+
+For a single time-to-event outcome, let $T \geq 0$ denote the event time and $C \geq 0$ the censoring time. The observed data are $X = \min(T, C)$ and $\delta = \mathbb{I}(T \leq C)$. The survival function is $S(t) = \mathbb{P}(T > t)$.
+
+\subsection{Parameter}
+
+For a fixed truncation time $\tau > 0$, the restricted mean survival time (RMST) is
+\begin{equation}
+  \theta(\tau) = \int_0^{\tau} S(t)\,dt.
+\end{equation}
+This is the area under the survival curve up to time $\tau$. 
+
+\subsection{Kaplan--Meier estimator}
+
+Let $t_1 < t_2 < \cdots < t_m$ denote the distinct observed event times (with $t_0 = 0$). The Kaplan--Meier estimator of $S$ is
+\begin{equation}
+  \widehat{S}(t) = \prod_{j:\, t_j \leq t} \left( 1 - \frac{d_j}{Y_j} \right),
+\end{equation}
+where $Y_j$ is the number at risk at $t_j^-$ and $d_j$ is the number of events at $t_j$. The estimated RMST is
+\begin{equation}
+  \widehat{\theta}(\tau) = \int_0^{\tau} \widehat{S}(t)\,dt = \sum_{j:\, t_j \leq \tau} \widehat{S}(t_j^-)\,(t_{j+1} \wedge \tau - t_j),
+\end{equation}
+based on the usual convention that the integrand is left-continuous with jumps at $(t_{j})_{j=1}^{m}$. 
+
+\subsection{Martingale and influence function}
+
+Let $N_i(t) = \mathbb{I}(X_i \leq t,\, \delta_i = 1)$ denote the subject-level counting process and $Y_i(t) = \mathbb{I}(X_i \geq t)$ the at-risk indicator. The counting process martingale for subject $i$ is
+\begin{equation}
+  dM_i(t) = dN_i(t) - Y_i(t)\,d\Lambda(t),
+\end{equation}
+where $\Lambda$ is the cumulative hazard. Replacing $\Lambda$ by the Nelson--Aalen estimator gives estimated martingale increments $d\widehat{M}_i(t)$.
+
+The estimated influence of observation $i$ on the RMST estimator with truncation time $\tau$ is
+\begin{equation}
+\hat{\psi}_i(\tau) = -\int_0^{\tau} \frac{\hat{\mu}(t)}{Y(t)/n}\,d\widehat{M}_i(t),
+\end{equation}
+where $\hat{\mu}(t) = \int_t^{\tau} \widehat{S}(u)\,du$ is the estimated remaining RMST from $t$ to $\tau$, $Y(t) = \sum_i Y_i(t)$ is the total number at risk at $t$, and $n$ is the sample size. In the implementation, the integral is computed as a sum over the distinct event times in $[0,\tau]$, with $\hat{\mu}(t_j) = \int_{t_j}^{\tau} \widehat{S}(u)\,du$ and the proportion at risk $Y(t_j)/n$ at each $t_j$.
+
+\subsection{Variance and perturbation}
+
+Under standard regularity conditions, $n^{1/2}\{\widehat{\theta}(\tau) - \theta(\tau)\}$ is asymptotically normal with mean zero and variance $\sigma^2 = E\{\psi_i(\tau)^2\}$. The package estimates $\sigma^2$ by the empirical variance of perturbed estimates. For $b = 1, \ldots, B$, draw $W_{1,b}, \ldots, W_{n,b}$ i.i.d.\ standard normal and form
+\begin{equation}
+  \widehat{\theta}_b^* = \widehat{\theta}(\tau) + \frac{1}{n}\sum_{i=1}^n \psi_i(\tau)\,W_{i,b}.
+\end{equation}
+The sample standard deviation of $\widehat{\theta}_1^*, \ldots, \widehat{\theta}_B^*$ estimates the standard error of $\widehat{\theta}(\tau)$. Confidence intervals and tests use this standard error with the normal approximation.
+
+\section{Multiple-outcome parameter}
+
+\subsection{Parameter of interest}
+
+Suppose each subject has $K$ time-to-event outcomes. For outcome $k$, denote the event time $T_k$, censoring time $C_k$, and observed data $(X_k, \delta_k)$ with $X_k = \min(T_k, C_k)$ and $\delta_k = \mathbb{I}(T_k \leq C_k)$. Let $S_k(t) = \mathbb{P}(T_k > t)$ and fix a common truncation time $\tau$ and non-negative weights $w_1, \ldots, w_K$ (default: $w_k = 1$). The multiple-outcome parameter is
+\begin{equation}
+  \theta = \sum_{k=1}^K w_k\,\theta_k(\tau) = \sum_{k=1}^K w_k \int_0^{\tau} S_k(t)\,dt.
+\end{equation}
+Thus, $\theta$ is the weighted sum of the RMSTs for the $K$ outcomes over $(0, \tau)$.
+
+\subsection{One-sample estimation}
+
+For a single sample, the estimator is
+\begin{equation}
+  \widehat{\theta} = \sum_{k=1}^K w_k\,\widehat{\theta}_k(\tau),
+\end{equation}
+where $\widehat{\theta}_k(\tau)$ is the Kaplan--Meier-based RMST for outcome $k$. The influence function for $\widehat{\theta}$ is the same linear combination of the per-outcome influence functions:
+\begin{equation}
+  \hat{\psi}_i = \sum_{k=1}^K w_k\,\hat{\psi}_{i,k}(\tau),
+\end{equation}
+where $\hat{\psi}_{i,k}(\tau)$ is the estimated influence for subject $i$ on the RMST of outcome $k$. Variance estimation and confidence intervals again proceed by perturbation.
+
+\section{Two-sample comparison}
+
+\subsection{Setting}
+
+Two independent groups are labeled arm 0 (reference) and arm 1 (treatment). Each group has its own multiple-outcome parameter:
+\begin{equation}
+  \theta_0 = \sum_{k=1}^K w_k \int_0^{\tau} S_{0,k}(t)\,dt, \qquad
+  \theta_1 = \sum_{k=1}^K w_k \int_0^{\tau} S_{1,k}(t)\,dt.
+\end{equation}
+The same weights $w_k$ and a common $\tau$ are used.
+
+\subsection{Contrasts}
+
+The package reports inference for two contrasts:
+\begin{itemize}
+  \item \textbf{Difference:} $\Delta = \theta_1 - \theta_0$, with estimator $\widehat{\Delta} = \widehat{\theta}_1 - \widehat{\theta}_0$. Under independence of the two samples, $\operatorname{Var}(\widehat{\Delta}) = \operatorname{Var}(\widehat{\theta}_0) + \operatorname{Var}(\widehat{\theta}_1)$. Standard errors are obtained from the perturbation-based variances in each arm; confidence intervals and two-sided $p$-values use the normal approximation.
+  \item \textbf{Ratio:} $\rho = \theta_1 / \theta_0$, with estimator $\widehat{\rho} = \widehat{\theta}_1 / \widehat{\theta}_0$. The delta method gives $\widehat{\operatorname{Var}}(\log \widehat{\rho}) = \widehat{\operatorname{Var}}(\widehat{\theta}_1)/\widehat{\theta}_1^2 + \widehat{\operatorname{Var}}(\widehat{\theta}_0)/\widehat{\theta}_0^2$. Confidence limits for $\rho$ are computed on the log scale then exponentiated; $p$-values are for the test of $\log \rho = 0$.
+\end{itemize}
+
+\section{Implementation notes}
+
+\begin{itemize}
+  \item \textbf{Truncation time.} If $\tau$ is not supplied, the one-sample procedure uses the maximum observed event time across all outcomes; the two-sample procedure uses the minimum of the two arm-specific maxima so that both arms are evaluated over the same follow-up range.
+  \item \textbf{Extrapolation.} When $\tau$ is larger than the maximum observed time, the optional \texttt{extend} flag allows extrapolating the Kaplan--Meier curve as constant beyond the last event time, so that the RMST integral can extend to $\tau$.
+\end{itemize}
+
+\end{document}

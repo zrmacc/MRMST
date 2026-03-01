@@ -2,17 +2,20 @@
 % Please edit documentation in R/RcppExports.R
 \name{CalcPsiRMST}
 \alias{CalcPsiRMST}
-\title{Integrate Kaplan Meier}
+\title{RMST Influence Function}
 \usage{
-CalcPsiRMST(status, time, tau)
+CalcPsiRMST(status, time, trunc_time)
 }
 \arguments{
 \item{status}{Status, coded as 0 for censoring, 1 for death.}
 
 \item{time}{Observation time.}
 
-\item{tau}{Truncation time.}
+\item{trunc_time}{Truncation time.}
+}
+\value{
+Numeric vector of influence function values for each observation.
 }
 \description{
-Integrate the Kaplan-Meier curve between two values.
+Influence function of the restricted mean survival time at time t.
 }

@@ -10,6 +10,7 @@ OneSample(
   alpha = 0.05,
   extend = FALSE,
   n_boot = 2000,
+  seed = NULL,
   tau = NULL,
   weights = NULL
 )
@@ -25,6 +26,9 @@ OneSample(
 maximum observation time?}
 
 \item{n_boot}{Number of perturbations for variance calculation.}
+
+\item{seed}{Optional integer. If set, the RNG state is fixed before running
+perturbations so that results are reproducible.}
 
 \item{tau}{Truncation time.}
 

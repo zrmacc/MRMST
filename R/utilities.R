@@ -21,10 +21,13 @@ MaxEventTime <- function(
   max_event_times <- lapply(seq_len(n_times), function(i) {
     current_status <- statuses[, i]
     current_time <- times[, i]
-    return(max(current_time[current_status == 1]))
+    observed <- current_time[current_status == 1]
+    if (length(observed) == 0) {
+      return(0)
+    }
+    return(max(observed))
   })
   max_event_times <- do.call(c, max_event_times)
-  max_event_times <- max(0, max_event_times)
-  return(max(max_event_times))
+  return(max(0, max_event_times))
 }
 

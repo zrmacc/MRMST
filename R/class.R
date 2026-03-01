@@ -36,13 +36,12 @@ setClass(
 #' @param ... Unused.
 #' @export
 print.OneSample <- function(x, ...) {
-  
   cat(glue::glue("Multiple RMST with {x@K} components."))
   cat("\n")
   tab <- x@Table %>%
     dplyr::mutate(dplyr::across(dplyr::where(is.numeric), \(x) round(x, digits = 3)))
   print(tab)
-  
+  return(invisible(x))
 }
 
 
@@ -103,7 +102,7 @@ print.TwoSample <- function(x, ...) {
   contrast <- x@Contrast %>%
     dplyr::mutate(dplyr::across(dplyr::where(is.numeric), \(x) round(x, digits = 3)))
   print(contrast)
-  
+  return(invisible(x))
 }
 
 

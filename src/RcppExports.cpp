@@ -12,39 +12,39 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // RMST
-SEXP RMST(const arma::colvec status, const arma::colvec time, const bool extend, Rcpp::Nullable<double> tau);
+SEXP RMST(const arma::colvec& status, const arma::colvec& time, bool extend, Rcpp::Nullable<double> tau);
 RcppExport SEXP _MRMST_RMST(SEXP statusSEXP, SEXP timeSEXP, SEXP extendSEXP, SEXP tauSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::colvec >::type status(statusSEXP);
-    Rcpp::traits::input_parameter< const arma::colvec >::type time(timeSEXP);
-    Rcpp::traits::input_parameter< const bool >::type extend(extendSEXP);
+    Rcpp::traits::input_parameter< const arma::colvec& >::type status(statusSEXP);
+    Rcpp::traits::input_parameter< const arma::colvec& >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< bool >::type extend(extendSEXP);
     Rcpp::traits::input_parameter< Rcpp::Nullable<double> >::type tau(tauSEXP);
     rcpp_result_gen = Rcpp::wrap(RMST(status, time, extend, tau));
     return rcpp_result_gen;
 END_RCPP
 }
 // CalcPsiRMST
-SEXP CalcPsiRMST(const arma::colvec status, const arma::colvec time, const double tau);
-RcppExport SEXP _MRMST_CalcPsiRMST(SEXP statusSEXP, SEXP timeSEXP, SEXP tauSEXP) {
+SEXP CalcPsiRMST(const arma::colvec& status, const arma::colvec& time, double trunc_time);
+RcppExport SEXP _MRMST_CalcPsiRMST(SEXP statusSEXP, SEXP timeSEXP, SEXP trunc_timeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::colvec >::type status(statusSEXP);
-    Rcpp::traits::input_parameter< const arma::colvec >::type time(timeSEXP);
-    Rcpp::traits::input_parameter< const double >::type tau(tauSEXP);
-    rcpp_result_gen = Rcpp::wrap(CalcPsiRMST(status, time, tau));
+    Rcpp::traits::input_parameter< const arma::colvec& >::type status(statusSEXP);
+    Rcpp::traits::input_parameter< const arma::colvec& >::type time(timeSEXP);
+    Rcpp::traits::input_parameter< double >::type trunc_time(trunc_timeSEXP);
+    rcpp_result_gen = Rcpp::wrap(CalcPsiRMST(status, time, trunc_time));
     return rcpp_result_gen;
 END_RCPP
 }
 // GenPerturb
-SEXP GenPerturb(const arma::colvec psi, const int n_boot);
+SEXP GenPerturb(const arma::colvec& psi, const int n_boot);
 RcppExport SEXP _MRMST_GenPerturb(SEXP psiSEXP, SEXP n_bootSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::colvec >::type psi(psiSEXP);
+    Rcpp::traits::input_parameter< const arma::colvec& >::type psi(psiSEXP);
     Rcpp::traits::input_parameter< const int >::type n_boot(n_bootSEXP);
     rcpp_result_gen = Rcpp::wrap(GenPerturb(psi, n_boot));
     return rcpp_result_gen;

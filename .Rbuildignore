@@ -1,5 +1,16 @@
+^\.github$
+^\.git
+^\.gitignore$
+^\.Rhistory$
+^\.RData$
+^\.Ruserdata$
+^\.\.Rcheck$
 ^RMAUC\.Rproj$
 ^\.Rproj\.user$
+^.*\.Rproj$
+^README_cache$
+^src/.*\.o$
+^src/.*\.so$
 LICENSE.md
 README
 README.md

@@ -76,7 +76,7 @@ Diff <- function(one_sample, alpha = 0.05) {
 #'
 #' @param one_sample Data.frame of one sample results.
 #' @param alpha Type I error.
-#' @return Data.frame for the difference.
+#' @return Data.frame for the ratio.
 #' @noRd
 Ratio <- function(one_sample, alpha = 0.05) {
   z <- stats::qnorm(1 - alpha / 2)
@@ -122,7 +122,7 @@ DiffRatio <- function(arm0, arm1, alpha = 0.05) {
 
 
 #' Two Sample Calculation
-#' 
+#'
 #' @param arm Treatment arm, coded as 0 for reference, 1 for treatment.
 #' @param statuses Array with 1 or more status variables.
 #' @param times Array with 1 or more event-time variables.
@@ -130,70 +130,70 @@ DiffRatio <- function(arm0, arm1, alpha = 0.05) {
 #' @param extend Extend the Kaplan-Meier curves if `tau` is set beyond the
 #'   maximum observation time?
 #' @param n_boot Number of perturbations for variance calculation.
+#' @param seed Optional integer. If set, the RNG state is fixed before running
+#'   perturbations so that results are reproducible.
 #' @param tau Truncation time.
 #' @param weights Optional weight vector. Defaults to equal weights.
 #' @export
 TwoSample <- function(
-    arm,
-    statuses,
-    times,
-    alpha = 0.05,
-    extend = FALSE,
-    n_boot = 2000,
-    tau = NULL,
-    weights = NULL
+  arm,
+  statuses,
+  times,
+  alpha = 0.05,
+  extend = FALSE,
+  n_boot = 2000,
+  seed = NULL,
+  tau = NULL,
+  weights = NULL
 ) {
-  
-  # Convert time and status to matrices.
-  statuses <- as.matrix(statuses)
-  times <- as.matrix(times)
-  n_times <- ncol(times)
-
-  InputsChecks(statuses = statuses, times = times, arm = arm)
-  
-  # Convert time and status to matrices.
   statuses <- as.matrix(statuses)
   times <- as.matrix(times)
   n_comp <- ncol(times)
-  
-  InputsChecks(
-    statuses = statuses, 
-    times = times
-  )
-  
-  # Weights.
+
+  InputsChecks(statuses = statuses, times = times, arm = arm)
+
   if (is.null(weights)) {
     weights <- rep(1, n_comp)
   }
-  
-  # Partition data.
+
   split_data <- PartitionData(arm = arm, statuses = statuses, times = times)
-  
-  # Truncation time.
+
   if (is.null(tau)) {
     tau0 <- MaxEventTime(statuses = split_data$statuses0, times = split_data$times0)
     tau1 <- MaxEventTime(statuses = split_data$statuses1, times = split_data$times1)
     tau <- min(tau0, tau1)
   }
-  
-  # Per arm results.
+  InputsChecks(
+    statuses = statuses,
+    times = times,
+    arm = arm,
+    tau = tau,
+    weights = weights,
+    n_comp = n_comp
+  )
+
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
   arm0 <- OneSample(
     statuses = split_data$statuses0,
     times = split_data$times0,
     alpha = alpha,
     extend = extend,
     n_boot = n_boot,
+    seed = NULL,
     tau = tau,
     weights = weights
   )
   arm0 <- AddArm(arm = 0, one_sample = arm0)
-  
+
   arm1 <- OneSample(
     statuses = split_data$statuses1,
     times = split_data$times1,
     alpha = alpha,
     extend = extend,
     n_boot = n_boot,
+    seed = NULL,
     tau = tau,
     weights = weights
   )

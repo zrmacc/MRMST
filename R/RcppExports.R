@@ -13,29 +13,25 @@ RMST <- function(status, time, extend = FALSE, tau = NULL) {
     .Call(`_MRMST_RMST`, status, time, extend, tau)
 }
 
-#' Integrate Kaplan Meier
+#' RMST Influence Function
 #'
-#' Integrate the Kaplan-Meier curve between two values.
-#' 
+#' Influence function of the restricted mean survival time at time t.
+#'
 #' @param status Status, coded as 0 for censoring, 1 for death.
 #' @param time Observation time.
-#' @param tau Truncation time.
-CalcPsiRMST <- function(status, time, tau) {
-    .Call(`_MRMST_CalcPsiRMST`, status, time, tau)
+#' @param trunc_time Truncation time.
+#' @return Numeric vector of influence function values for each observation.
+CalcPsiRMST <- function(status, time, trunc_time) {
+    .Call(`_MRMST_CalcPsiRMST`, status, time, trunc_time)
 }
 
 #' Generate Perturbations
-#'  
-#' Generates realizations of \eqn{\frac{1}{n}\sum_{i=1}^{n}\psi_{i}w_{i}},
-#' where \eqn{\psi_{i}} is the influence function for the ith subject and the
-#' \eqn{w_{i}} are IID random weights.
-#' 
-#' @section Notes:
-#' The random seed should be set in R prior to calling this function.
 #'
 #' @param psi Per-subject influence values.
 #' @param n_boot Number of perturbations.
 #' @return Numeric vector.
+#' @section Notes:
+#' The random seed should be set in R prior to calling this function.
 GenPerturb <- function(psi, n_boot) {
     .Call(`_MRMST_GenPerturb`, psi, n_boot)
 }

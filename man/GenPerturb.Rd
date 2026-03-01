@@ -2,11 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{GenPerturb}
 \alias{GenPerturb}
-\title{Generate Perturbations
-
-Generates realizations of \eqn{\frac{1}{n}\sum_{i=1}^{n}\psi_{i}w_{i}},
-where \eqn{\psi_{i}} is the influence function for the ith subject and the
-\eqn{w_{i}} are IID random weights.}
+\title{Generate Perturbations}
 \usage{
 GenPerturb(psi, n_boot)
 }
@@ -20,10 +16,6 @@ Numeric vector.
 }
 \description{
 Generate Perturbations
-
-Generates realizations of \eqn{\frac{1}{n}\sum_{i=1}^{n}\psi_{i}w_{i}},
-where \eqn{\psi_{i}} is the influence function for the ith subject and the
-\eqn{w_{i}} are IID random weights.
 }
 \section{Notes}{
 
